@@ -28,6 +28,13 @@ action_time = 2
 if send_button:
     if numbers_input and message_input:
         numbers_list = numbers_input.split()
+        with st.echo():
+        from selenium import webdriver
+        from selenium.webdriver.chrome.options import Options
+        from selenium.webdriver.chrome.service import Service
+        from webdriver_manager.chrome import ChromeDriverManager
+        from webdriver_manager.core.os_manager import ChromeType
+
         @st.cache_resource
         def get_driver():
             return webdriver.Chrome(
@@ -36,11 +43,12 @@ if send_button:
                 ),
                 options=options,
             )
-        options=Options()
-        options.add_argument("--headless=new")
-        options.add_argument('--disable-gpu')
-        
-        driver=get_driver()
+
+        options = Options()
+        options.add_argument("--disable-gpu")
+        options.add_argument("--headless")
+    
+        driver = get_driver()
         #Open WhatsApp Web
         link = 'https://web.whatsapp.com'
         driver.get(link)
