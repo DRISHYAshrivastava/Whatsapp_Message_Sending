@@ -7,6 +7,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
+from webdriver_manager.core.os_manager import ChromeType
+
 
 # Streamlit UI
 st.title("WhatsApp Bulk Message Sender")
@@ -26,10 +28,19 @@ action_time = 2
 if send_button:
     if numbers_input and message_input:
         numbers_list = numbers_input.split()
-        options = Options() 
+        @st.cache_resource
+        def get_driver():
+            return webdriver.Chrome(
+                service=Service(
+                    ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
+                ),
+                options=options,
+            )
+        option=options()
         options.add_argument("--headless=new")
         options.add_argument('--disable-gpu')
-        driver = webdriver.Chrome(options=options)
+        
+        driver=get_driver()
         #Open WhatsApp Web
         link = 'https://web.whatsapp.com'
         driver.get(link)
