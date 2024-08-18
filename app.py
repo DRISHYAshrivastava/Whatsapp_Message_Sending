@@ -2,13 +2,11 @@ import streamlit as st
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-import time
+from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
-
+import time
 
 # Streamlit UI
 st.title("WhatsApp Bulk Message Sender")
@@ -28,32 +26,22 @@ action_time = 2
 if send_button:
     if numbers_input and message_input:
         numbers_list = numbers_input.split()
-        with st.echo():
-            from selenium import webdriver
-            from selenium.webdriver.chrome.options import Options
-            from selenium.webdriver.chrome.service import Service
-            from webdriver_manager.chrome import ChromeDriverManager
-            from webdriver_manager.core.os_manager import ChromeType
-    
-            @st.cache_resource
-            def get_driver():
-                return webdriver.Chrome(
-                    service=Service(
-                        ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-                    ),
-                    options=options,
-                )
-    
+
+        @st.cache_resource
+        def get_driver():
             options = Options()
             options.add_argument("--disable-gpu")
             options.add_argument("--headless")
-        
-            driver = get_driver()
-            #Open WhatsApp Web
-            link = 'https://web.whatsapp.com'
-            driver.get(link)
-            st.write("Please scan the QR code through your WhatsApp app to log in to WhatsApp Web. You will get 30 seconds to login.")
-            time.sleep(login_time)
+            service = Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install())
+            return webdriver.Chrome(service=service, options=options)
+
+        driver = get_driver()
+
+        # Open WhatsApp Web
+        link = 'https://web.whatsapp.com'
+        driver.get(link)
+        st.write("Please scan the QR code through your WhatsApp app to log in to WhatsApp Web. You will get 30 seconds to log in.")
+        time.sleep(login_time)
 
         for num in numbers_list:
             num = num.strip()
