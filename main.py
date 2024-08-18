@@ -1,0 +1,63 @@
+import streamlit as st
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+import time
+
+# Streamlit UI
+st.title("WhatsApp Bulk Message Sender")
+# Input box for phone numbers (separated by spaces)
+numbers_input = st.text_area("Enter phone numbers (separated by spaces):")
+
+# Input box for the message
+message_input = st.text_area("Enter your message:")
+
+st.warning("Please keep your phone with you and ensure it's connected to the internet.")
+# Button to send messages
+send_button = st.button("Send")
+
+# Configurations
+login_time = 30                 # Time for login (in seconds)
+new_msg_time = 5                # Time for a new message (in seconds)
+send_msg_time = 5               # Time for sending a message (in seconds)
+country_code = 91               # Set your country code
+action_time = 2                 # Set time for button click action
+
+# Sending messages if the "Send" button is pressed
+if send_button:
+    if numbers_input and message_input:
+        # Convert input string into a list of numbers
+        numbers_list = numbers_input.split()
+
+        # Create driver
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+
+        # Open WhatsApp Web
+        link = 'https://web.whatsapp.com'
+        driver.get(link)
+        st.write("Please scan the QR code through your Whatsapp app to log in to WhatsApp Web.You will get 30 seconds to login to the WhatsApp Web")
+        time.sleep(login_time)
+
+        # Loop through the list of numbers
+        for num in numbers_list:
+            num = num.strip()
+            phone_link = f'https://web.whatsapp.com/send/?phone={country_code}{num}'
+            driver.get(phone_link)
+            time.sleep(new_msg_time)
+
+            # Prepare the message
+            actions = ActionChains(driver)
+            for line in message_input.split('\n'):
+                actions.send_keys(line)
+                actions.key_down(Keys.SHIFT).send_keys(Keys.ENTER).key_up(Keys.SHIFT)
+            actions.send_keys(Keys.ENTER)
+            actions.perform()
+            time.sleep(send_msg_time)
+
+        # Quit the driver
+        driver.quit()
+        st.success("Messages sent successfully!")
+    else:
+        st.error("Please enter both phone numbers and a message.")
