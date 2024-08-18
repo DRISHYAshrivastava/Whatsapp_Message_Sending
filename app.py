@@ -36,7 +36,7 @@ if send_button:
                 ),
                 options=options,
             )
-        option=options()
+        option=Options()
         options.add_argument("--headless=new")
         options.add_argument('--disable-gpu')
         
