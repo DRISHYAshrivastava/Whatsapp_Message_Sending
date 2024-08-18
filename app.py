@@ -27,7 +27,7 @@ if send_button:
     if numbers_input and message_input:
         numbers_list = numbers_input.split()
 
-    @st.experimental_singleton
+    @st.cache_resource
     def get_driver():
         options = Options()
         options.add_argument('--disable-gpu')
