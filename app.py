@@ -29,10 +29,8 @@ if send_button:
         options = Options() 
         options.add_argument("--headless=new")
         options.add_argument('--disable-gpu')
-
         driver = webdriver.Chrome(options=options)
-
-        # Open WhatsApp Web
+        #Open WhatsApp Web
         link = 'https://web.whatsapp.com'
         driver.get(link)
         st.write("Please scan the QR code through your WhatsApp app to log in to WhatsApp Web. You will get 30 seconds to login.")
