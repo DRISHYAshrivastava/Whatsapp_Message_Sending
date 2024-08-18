@@ -25,23 +25,11 @@ action_time = 2
 if send_button:
     if numbers_input and message_input:
         numbers_list = numbers_input.split()
+        options = Options() 
+        options.add_argument("--headless=new")
+        options.add_argument('--disable-gpu')
 
-        # Set up Chrome options
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")  # Run Chrome in headless mode
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
-        chrome_options.add_argument("--disable-gpu")
-
-        # Create the WebDriver with the specified options
-        try:
-            driver = webdriver.Chrome(
-                service=Service(ChromeDriverManager().install()), 
-                options=chrome_options
-            )
-        except Exception as e:
-            st.error(f"Error initializing WebDriver: {e}")
-            st.stop()
+        driver = webdriver.Chrome(options=options)
 
         # Open WhatsApp Web
         link = 'https://web.whatsapp.com'
