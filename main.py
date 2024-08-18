@@ -13,7 +13,7 @@ numbers_input = st.text_area("Enter phone numbers (separated by spaces):")
 
 # Input box for the message
 message_input = st.text_area("Enter your message:")
-
+st.warning("Please ensure you are using the Chrome browser."
 st.warning("Please keep your phone with you and ensure it's connected to the internet.")
 # Button to send messages
 send_button = st.button("Send")
